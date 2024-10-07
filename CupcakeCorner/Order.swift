@@ -29,10 +29,27 @@ class Order: ObservableObject, Codable {
     @Published var extraFrosting = false
     @Published var addSprinkles = false
     
-    @Published var name = ""
-    @Published var streetAddress = ""
+    @Published var name = "" {
+        didSet {
+            UserDefaults.standard.set(name, forKey: "Name")
+        }
+    }
+    @Published var streetAddress = "" {
+        didSet {
+            UserDefaults.standard.set(streetAddress, forKey: "StreetAddress")
+        }
+    }
     @Published var city = ""
-    @Published var zip = ""
+    {
+        didSet {
+            UserDefaults.standard.set(city, forKey: "City")
+        }
+    }
+    @Published var zip = "" {
+        didSet {
+            UserDefaults.standard.set(zip, forKey: "Zip")
+        }
+    }
     
     var hasValidAddress: Bool {
         if name.trimmingCharacters(in: .whitespaces).isEmpty ||
@@ -64,7 +81,12 @@ class Order: ObservableObject, Codable {
         return cost
     }
     
-    init() {}
+    init() {
+        name = UserDefaults.standard.string(forKey: "Name") ?? ""
+        streetAddress = UserDefaults.standard.string(forKey: "StreetAddress") ?? ""
+        city = UserDefaults.standard.string(forKey: "City") ?? ""
+        zip = UserDefaults.standard.string(forKey: "Zip") ?? ""
+    }
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
